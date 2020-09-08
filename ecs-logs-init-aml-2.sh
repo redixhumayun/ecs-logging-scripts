@@ -6,23 +6,11 @@ Content-Type: text/x-shellscript; charset="us-ascii"
 #!/usr/bin/env bash
 
 # cluster to join REPLACE `YOURCLUSTERNAMEHERE` OBVIOUSLY
-echo ECS_CLUSTER=YOURCLUSTERNAMEHERE >> /etc/ecs/ecs.config
+echo ECS_CLUSTER=fabtrakr-ecs-cluster >> /etc/ecs/ecs.config
+echo ECS_BACKEND_HOST= >> /etc/ecs/ecs.config;
 
 # Install awslogs and the jq JSON parser
 yum install -y awslogs jq
-
-# Install AWS SSM agent RPM for later mass commands
-# Not present by default on ECS Optimized AMI:
-# https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html#agent-install-al
-
-# For x86_64 instances, so what you're probably using
-yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-
-# For arm64 instances, you'd run this:
-# yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_arm64/amazon-ssm-agent.rpm
-
-# For 32-bit:
-# yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_386/amazon-ssm-agent.rpm
 
 # Inject the CloudWatch Logs configuration file contents
 cat > /etc/awslogs/awslogs.conf <<- EOF
